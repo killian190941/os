@@ -159,4 +159,33 @@ int main(void) {
     return 0;
     
 }    
-  
+#######
+
+#include <time.h>
+
+int main(void) {
+    srand(time(NULL)); // Initializes the random number generator based on the current time
+    // ... (rest of your code) ...
+    while (n == 0) {
+        if (joueur == 'X') { // Player's turn
+            printf("Joueur %c, veuillez entrer le numéro de la colonne où placer le jeton (de 1 à 7).\n",joueur);
+            scanf("%d",&col);
+            col--;
+        } else { // Computer's turn
+            do {
+                col = rand() % 7; // Generate a random number between 0 and 6
+            } while(!verif_col(grille, col)); // Keep trying until we get a valid column
+        }
+        if (!verif_col(grille, col)) {
+            continue;
+        }
+        // ... (rest of your code) ...
+        if (joueur == 'X') {
+            joueur = 'O';
+        } else {
+            joueur = 'X';
+        } 
+    }
+    // ... (rest of your code) ...
+    return 0;
+}

@@ -217,3 +217,92 @@ if (joueur == 'X') {
     joueur = 'X';
 }
 These features make the game interactive and user-friendly by providing immediate and clear feedback, ensuring the game rules are followed, and presenting a fresh game board after each move.
+
+
+
+#####################################################################
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+
+void random_move(char **grille, char joueur) {
+    int ligne, col;
+    srand(time(0)); // Seed the random number generator with the current time
+    while (1) {
+        ligne = rand() % 3; // Random row
+        col = rand() % 3;   // Random column
+        if (grille[ligne][col] == ' ') {
+            grille[ligne][col] = joueur; // Place the piece if the square is empty
+            break;
+        }
+    }
+}
+
+int main(void) {
+    // Initialization
+    char **grille = malloc(3 * sizeof(char *));
+    for (int i = 0; i < 3; i++) {
+        grille[i] = malloc(3 * sizeof(char));
+    }
+    init_grille(grille);
+
+    imprime(grille);
+    
+    char joueur ='X';
+    int ligne;
+    int col;
+
+    while (1) {
+        if (joueur == 'X') {
+            printf("Joueur %c, veuillez entrer les coordonées de la ligne et de la colonne (séparées par une virgule) où vous voulez placer votre pion (de 1 à 3 pour les 2)\n",joueur);
+            if (scanf("%d,%d",&ligne,&col) != 2) {
+                printf("Entrée invalide. Veuillez entrer deux nombres séparés par une virgule.\n");
+
+                // clear the buffer
+                while ((getchar()) != '\n');
+                continue;
+            }
+
+            col--;
+            ligne--;
+        
+            if (!verif_entree(ligne,col)) {
+                continue;
+            }
+
+            if (!verif_grille(grille,col,ligne)) {
+                continue;
+            }
+            placement(grille,col,ligne,joueur);
+        } else {
+            printf("Computer playing move...\n");
+            random_move(grille, joueur);
+        }
+        
+        system("clear");
+        imprime(grille);
+
+        if (gagne(grille,joueur)) {
+            printf("Félicitation ! le joueur %c a gagné la partie", joueur);
+            break;
+        }
+
+         if (partie_nulle(grille)) {
+            printf("Plus aucun coup possible, la partie se finit en match nul");
+            break;
+        }
+
+        if (joueur == 'X') {
+            joueur = 'O';
+        } else {
+            joueur = 'X';
+        }
+    }
+    for (int i = 0; i < 3; i++) {
+        free(grille[i]);
+    }
+    free(grille);
+
+    return 0;
+}

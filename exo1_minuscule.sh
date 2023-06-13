@@ -22,7 +22,8 @@ function maj2min() {
     fi
 
     # Récupération de la liste des fichiers dans l'arborescence
-    list_fichier=$(find "$root_dir" -type f)
+    list_fichier=$(find "$root_dir" -type f -o -type -d)
+    liste_fichier=$(echo "list_fichier" sort -)
 
     # Boucle sur chaque fichier
     for fichier in $list_fichier; do
